@@ -1,12 +1,16 @@
 package com.jcalvopinam.vehiclecirculation.utility;
 
+import com.jcalvopinam.vehiclecirculation.domain.Policy;
 import com.jcalvopinam.vehiclecirculation.exception.DateException;
 import com.jcalvopinam.vehiclecirculation.exception.PlateNumberException;
 import com.jcalvopinam.vehiclecirculation.exception.TimeException;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
@@ -48,7 +52,7 @@ public class ValidationHelper {
      * Example: 2020/10/05
      *
      * @param date receives the date
-     * @return the date in LocaDate object.
+     * @return the date in LocalDate object.
      */
     public static LocalDateTime dateTime(final String date, final String time) {
         log.info("dateTime: {} {}", date, time);
@@ -70,13 +74,95 @@ public class ValidationHelper {
     }
 
     /**
-     * Validates that the day is a week day.
+     * Validates whether the day is a week day.
      *
-     * @param day receive a day.
+     * @param dayOfWeek receive a day.
      * @return a boolean.
      */
-    public static boolean isWeekDay(final int day) {
-        return day != 6 && day != 7;
+    public static boolean isWeekDay(final DayOfWeek dayOfWeek) {
+        return !DayOfWeek.SATURDAY.equals(dayOfWeek) && !DayOfWeek.SUNDAY.equals(dayOfWeek);
+    }
+
+    /**
+     * Validates whether the vehicle is restricted to road or not depending on the time, day of week and plateNumber.
+     *
+     * @param vehicleDateTime receives the LocalDateTime object.
+     * @param lastPlateNumber receives the last PlateNumber
+     * @param policy          receives the Policy object.
+     * @return a boolean.
+     */
+    public boolean isCirculationRestricted(final LocalDateTime vehicleDateTime, final char lastPlateNumber,
+                                           final Policy policy) {
+        if (isPlateRestricted(vehicleDateTime.getDayOfWeek(), lastPlateNumber)) {
+            return isDateTimeRestricted(vehicleDateTime, policy);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Validates whether the plate is restricted depending on the dayOfWeek and the lastPlateNumber
+     *
+     * @param dayOfWeek       receives the DayOfWeek object.
+     * @param lastPlateNumber receives the last PlateNumber
+     * @return a boolean.
+     */
+    private static boolean isPlateRestricted(final DayOfWeek dayOfWeek, char lastPlateNumber) {
+        return (DayOfWeek.MONDAY.equals(dayOfWeek) && (lastPlateNumber == '1' || lastPlateNumber == '2'))
+               || (DayOfWeek.TUESDAY.equals(dayOfWeek) && (lastPlateNumber == '3' || lastPlateNumber == '4'))
+               || (DayOfWeek.WEDNESDAY.equals(dayOfWeek) && (lastPlateNumber == '5' || lastPlateNumber == '6'))
+               || (DayOfWeek.THURSDAY.equals(dayOfWeek) && (lastPlateNumber == '7' || lastPlateNumber == '8'))
+               || (DayOfWeek.FRIDAY.equals(dayOfWeek) && (lastPlateNumber == '9' || lastPlateNumber == '0'));
+    }
+
+    /**
+     * Validates if the vehicle is restricted depending on the time
+     *
+     * @param vehicleDateTime receives the LocalDateTime object.
+     * @param policy          receives the Policy object.
+     * @return a boolean.
+     */
+    private boolean isDateTimeRestricted(final LocalDateTime vehicleDateTime, final Policy policy) {
+        final LocalTime startTimeMorning = setTimeRestriction(policy.getMorningStartTime()
+                                                                    .getHour(),
+                                                              policy.getMorningStartTime()
+                                                                    .getMinute());
+        final LocalTime endTimeMorning = setTimeRestriction(policy.getMorningEndTime()
+                                                                  .getHour(),
+                                                            policy.getMorningEndTime()
+                                                                  .getMinute());
+        final LocalTime startTimeAfternoon = setTimeRestriction(policy.getAfternoonStartTime()
+                                                                      .getHour(),
+                                                                policy.getAfternoonStartTime()
+                                                                      .getMinute());
+        final LocalTime endTimeAfternoon = setTimeRestriction(policy.getAfternoonEndTime()
+                                                                    .getHour(),
+                                                              policy.getAfternoonEndTime()
+                                                                    .getMinute());
+
+        final LocalTime halfDay = setTimeRestriction(12, 0);
+
+        final LocalTime vehicleTime = vehicleDateTime.toLocalTime()
+                                                     .plusNanos(1);
+
+        if (vehicleTime.isBefore(halfDay)) {
+            return vehicleTime.isAfter(startTimeMorning) && vehicleTime.isBefore(endTimeMorning);
+        } else {
+            return vehicleTime.isAfter(startTimeAfternoon) && vehicleTime.isBefore(endTimeAfternoon);
+        }
+    }
+
+    /**
+     * Creates a LocalTime based on the input of the parameters
+     *
+     * @param hour   receives the hour.
+     * @param minute receives the minute.
+     * @return a LocalTime object.
+     */
+    private static LocalTime setTimeRestriction(final int hour, final int minute) {
+        return LocalDate.now()
+                        .atTime(hour, minute)
+                        .toLocalTime();
     }
 
 }

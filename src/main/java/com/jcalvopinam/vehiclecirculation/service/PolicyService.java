@@ -9,6 +9,7 @@ public interface PolicyService {
 
     /**
      * This method will return the different times for the policy retrieving from application.properties file.
+     *
      * @return Policy object.
      */
     Policy getPolicy();

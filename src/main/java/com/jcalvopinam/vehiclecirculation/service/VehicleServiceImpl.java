@@ -33,7 +33,7 @@ public class VehicleServiceImpl implements VehicleService {
 
         if (ValidationHelper.isWeekDay(vehicleDateTime.getDayOfWeek())) {
             if (ValidationHelper.isCirculationRestricted(vehicleDateTime, lastNumber, policyService.getPolicy())) {
-                response = new VehicleResponseDTO("Restricted hours", "It is forbidden to drive at this time.");
+                response = new VehicleResponseDTO("Restricted hours", "It is forbidden to drive at this hours.");
             } else {
                 response = new VehicleResponseDTO("Allowed hours", "It is permitted to circulate in this hours.");
             }

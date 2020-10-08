@@ -1,0 +1,364 @@
+{
+  "info": {
+    "_postman_id": "d3fbd471-c95e-4951-b539-d1e41724427a",
+    "name": "vehicle-circulation",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "input validations",
+      "item": [
+        {
+          "name": "Invalid plateNumber",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"plateNumber\":\"AAA-000X\",\n    \"date\": \"2020/10/05\",\n    \"time\": \"06:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/vehicle-circulation/api",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "vehicle-circulation",
+                "api"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Invalid date",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"plateNumber\":\"AAA-0001\",\n    \"date\": \"2020/10/X\",\n    \"time\": \"06:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/vehicle-circulation/api",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "vehicle-circulation",
+                "api"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Invalid time",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"plateNumber\":\"AAA-0001\",\n    \"date\": \"2020/10/05\",\n    \"time\": \"06:XX\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/vehicle-circulation/api",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "vehicle-circulation",
+                "api"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "protocolProfileBehavior": {}
+    },
+    {
+      "name": "weekday",
+      "item": [
+        {
+          "name": "Allowed hours before 7:00",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"plateNumber\":\"AAA-0001\",\n    \"date\": \"2020/10/05\",\n    \"time\": \"06:59\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/vehicle-circulation/api",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "vehicle-circulation",
+                "api"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Restricted hours after 7:00",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"plateNumber\":\"AAA-0001\",\n    \"date\": \"2020/10/05\",\n    \"time\": \"07:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/vehicle-circulation/api",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "vehicle-circulation",
+                "api"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Restricted hours before 9:30",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"plateNumber\":\"AAA-0001\",\n    \"date\": \"2020/10/05\",\n    \"time\": \"09:29\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/vehicle-circulation/api",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "vehicle-circulation",
+                "api"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Restricted hours after 9:30",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"plateNumber\":\"AAA-0001\",\n    \"date\": \"2020/10/05\",\n    \"time\": \"09:30\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/vehicle-circulation/api",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "vehicle-circulation",
+                "api"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Allowed hours before 16:00",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"plateNumber\":\"AAA-0001\",\n    \"date\": \"2020/10/05\",\n    \"time\": \"15:59\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/vehicle-circulation/api",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "vehicle-circulation",
+                "api"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Restricted hours after 16:00",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"plateNumber\":\"AAA-0001\",\n    \"date\": \"2020/10/05\",\n    \"time\": \"16:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/vehicle-circulation/api",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "vehicle-circulation",
+                "api"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Restricted hours before 19:30",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"plateNumber\":\"AAA-0001\",\n    \"date\": \"2020/10/05\",\n    \"time\": \"19:29\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/vehicle-circulation/api",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "vehicle-circulation",
+                "api"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Restricted hours after 19:30",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"plateNumber\":\"AAA-0001\",\n    \"date\": \"2020/10/05\",\n    \"time\": \"19:30\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/vehicle-circulation/api",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "vehicle-circulation",
+                "api"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "protocolProfileBehavior": {}
+    },
+    {
+      "name": "weekend",
+      "item": [
+        {
+          "name": "Allowed weekend",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"plateNumber\":\"AAA-0001\",\n    \"date\": \"2020/10/10\",\n    \"time\": \"08:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8080/vehicle-circulation/api",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "vehicle-circulation",
+                "api"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "protocolProfileBehavior": {}
+    }
+  ],
+  "protocolProfileBehavior": {}
+}

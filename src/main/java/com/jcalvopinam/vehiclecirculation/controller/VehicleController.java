@@ -4,6 +4,7 @@ import com.jcalvopinam.vehiclecirculation.domain.Vehicle;
 import com.jcalvopinam.vehiclecirculation.dto.VehicleResponseDTO;
 import com.jcalvopinam.vehiclecirculation.service.VehicleService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,8 @@ public class VehicleController {
      * @return a VehicleResponseDTO object.
      */
     @PostMapping
+    @ApiOperation("It validates if a vehicle is allowed circulate in a certain date and hour based on" +
+                  " the last digit of the plate")
     public ResponseEntity<VehicleResponseDTO> validate(@RequestBody final Vehicle vehicle) {
         return new ResponseEntity<>(vehicleService.validate(vehicle), HttpStatus.OK);
     }

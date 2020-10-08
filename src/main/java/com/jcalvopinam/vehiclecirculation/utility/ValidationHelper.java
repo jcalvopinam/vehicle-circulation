@@ -4,7 +4,6 @@ import com.jcalvopinam.vehiclecirculation.domain.Policy;
 import com.jcalvopinam.vehiclecirculation.exception.DateException;
 import com.jcalvopinam.vehiclecirculation.exception.PlateNumberException;
 import com.jcalvopinam.vehiclecirculation.exception.TimeException;
-import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.DayOfWeek;
@@ -19,9 +18,14 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@UtilityClass
 @Slf4j
 public class ValidationHelper {
+
+    /**
+     * The constructor mustn't be instantiate because this is a utility class.
+     */
+    private ValidationHelper() {
+    }
 
     /**
      * The plateNumber must have this structure: (3 Characters)(Dash Separator)(4 Numbers).
@@ -55,7 +59,9 @@ public class ValidationHelper {
      * @return the date in LocalDate object.
      */
     public static LocalDateTime dateTime(final String date, final String time) {
-        log.info("dateTime: {} {}", date, time);
+        final String dateTime = String.format("%s %s", date, time);
+        log.info("dateTime: {}", dateTime);
+
         if (Objects.isNull(date)) {
             throw new DateException("The date cannot be null");
         }
@@ -66,10 +72,11 @@ public class ValidationHelper {
             final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu/MM/dd HH:mm")
                                                                  .withLocale(Locale.US)
                                                                  .withResolverStyle(ResolverStyle.STRICT);
-            final String dateTime = String.format("%s %s", date, time);
+
             return LocalDateTime.parse(dateTime, formatter);
         } catch (DateTimeParseException dtpe) {
-            throw new DateTimeParseException("Incorrect date format", dtpe.getParsedString(), dtpe.getErrorIndex());
+            final String message = String.format("Incorrect date format: %s", dateTime.substring(dtpe.getErrorIndex()));
+            throw new DateTimeParseException(message, dtpe.getParsedString(), dtpe.getErrorIndex());
         }
     }
 
@@ -91,8 +98,8 @@ public class ValidationHelper {
      * @param policy          receives the Policy object.
      * @return a boolean.
      */
-    public boolean isCirculationRestricted(final LocalDateTime vehicleDateTime, final char lastPlateNumber,
-                                           final Policy policy) {
+    public static boolean isCirculationRestricted(final LocalDateTime vehicleDateTime, final char lastPlateNumber,
+                                                  final Policy policy) {
         if (isPlateRestricted(vehicleDateTime.getDayOfWeek(), lastPlateNumber)) {
             return isDateTimeRestricted(vehicleDateTime, policy);
         } else {
@@ -122,7 +129,7 @@ public class ValidationHelper {
      * @param policy          receives the Policy object.
      * @return a boolean.
      */
-    private boolean isDateTimeRestricted(final LocalDateTime vehicleDateTime, final Policy policy) {
+    private static boolean isDateTimeRestricted(final LocalDateTime vehicleDateTime, final Policy policy) {
         final LocalTime startTimeMorning = setTimeRestriction(policy.getMorningStartTime()
                                                                     .getHour(),
                                                               policy.getMorningStartTime()
